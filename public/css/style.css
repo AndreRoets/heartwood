@@ -1,0 +1,607 @@
+/* Table of Contents
+--------------------
+1.  CSS Variables
+2.  Global Styles & Resets
+3.  Utility Classes
+4.  Hero: Crystals + Light Rays + Starfield (UPDATED)
+5.  Header & Navigation
+6.  Buttons
+7.  Hero Section
+8.  How It Works Section (Glassmorphism)
+9.  Nominees Section
+10. CTA Section
+11. Footer
+12. Responsive Media Queries + Motion Pref
+-------------------- */
+
+/* 1. CSS Variables
+-------------------- */
+:root {
+    --font-heading: 'Playfair Display', serif;
+    --font-body: 'Inter', sans-serif;
+
+    --color-navy-dark: #0a0c21;
+    --color-navy-light: #1d1e3a;
+    --color-indigo: #1a1a4a;
+    --color-teal: #00f2d3;
+    --color-aqua: #00c9e4;
+    --color-gold: #ffd700;
+    --color-light: #f0f0f0;
+    --color-gray: #a0a0b4;
+    --color-white: #ffffff;
+
+    --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 8px 15px rgba(0, 0, 0, 0.2);
+    --glow-primary: 0 0 15px 3px rgba(0, 242, 211, 0.4);
+    --glow-secondary: 0 0 15px 3px rgba(255, 255, 255, 0.2);
+
+    --max-width: 1200px;
+    --border-radius: 50px;
+    --transition-fast: 0.2s ease-in-out;
+
+    /* Hero parallax inputs (set by JS) */
+    --px: 0px;
+    --py: 0px;
+
+    /* Crystal color stops */
+    --crystal-top: rgba(0, 242, 211, 0.9);
+    --crystal-mid: rgba(0, 201, 228, 0.65);
+    --crystal-low: rgba(255, 215, 0, 0.55);
+
+    /* Light rays */
+    --ray-color: rgba(255,255,255,0.08);
+}
+
+/* 2. Global Styles & Resets
+-------------------- */
+*,
+*::before,
+*::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; font-size: 16px; }
+
+body {
+    background-color: var(--color-navy-dark);
+    color: var(--color-light);
+    font-family: var(--font-body);
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    color: var(--color-white);
+    line-height: 1.2;
+    font-weight: 700;
+}
+
+a { color: var(--color-teal); text-decoration: none; transition: color var(--transition-fast); }
+a:hover { color: var(--color-aqua); }
+
+img { max-width: 100%; height: auto; display: block; }
+ul { list-style: none; }
+
+/* 3. Utility Classes
+-------------------- */
+.container { width: 90%; max-width: var(--max-width); margin-left: auto; margin-right: auto; }
+.section-title { font-size: 2.5rem; text-align: center; margin-bottom: 3rem; }
+.text-gold { color: var(--color-gold); }
+
+/* 4. Hero: Crystals + Light Rays + Starfield (UPDATED)
+-------------------- */
+
+/* Star animations */
+@keyframes twinkle {
+    0% { transform: scale(1); opacity: .45; }
+    50% { transform: scale(1.15); opacity: 1; }
+    100% { transform: scale(1); opacity: .45; }
+}
+@keyframes drift {
+    0%   { transform: translate3d(0, 0, 0) }
+    100% { transform: translate3d(2vw, -2vh, 0) }
+}
+
+.hero__stars {
+    position: absolute; inset: 0; pointer-events: none; z-index: 0;
+    /* tiny parallax nudge tied to --px/--py for subtle depth */
+    transform: translate3d(calc(var(--px) * 0.02), calc(var(--py) * 0.02), 0);
+}
+
+/* Tiny stars layer (1px) */
+.hero__stars::before {
+    content: "";
+    position: absolute; inset: 0;
+    width: 1px; height: 1px; border-radius: 50%;
+    background: var(--color-white);
+    box-shadow:
+      4vw 6vh 0 0 #fff,   8vw 14vh 0 0 #fff,  12vw 28vh 0 0 #fff,  18vw 10vh 0 0 #fff,
+      22vw 34vh 0 0 #fff, 26vw 18vh 0 0 #fff, 30vw 8vh 0 0 #fff,   34vw 24vh 0 0 #fff,
+      38vw 16vh 0 0 #fff, 42vw 30vh 0 0 #fff, 46vw 12vh 0 0 #fff,  50vw 20vh 0 0 #fff,
+      54vw 6vh 0 0 #fff,  58vw 26vh 0 0 #fff, 62vw 14vh 0 0 #fff,  66vw 32vh 0 0 #fff,
+      70vw 22vh 0 0 #fff, 74vw 10vh 0 0 #fff, 78vw 28vh 0 0 #fff,  82vw 18vh 0 0 #fff,
+      86vw 34vh 0 0 #fff, 90vw 8vh 0 0 #fff,  10vw 40vh 0 0 #fff,  14vw 52vh 0 0 #fff,
+      18vw 62vh 0 0 #fff, 22vw 48vh 0 0 #fff, 28vw 60vh 0 0 #fff,  32vw 44vh 0 0 #fff,
+      36vw 56vh 0 0 #fff, 40vw 48vh 0 0 #fff, 44vw 64vh 0 0 #fff,  48vw 54vh 0 0 #fff,
+      52vw 42vh 0 0 #fff, 56vw 66vh 0 0 #fff, 60vw 58vh 0 0 #fff,  64vw 46vh 0 0 #fff,
+      68vw 68vh 0 0 #fff, 72vw 52vh 0 0 #fff, 76vw 62vh 0 0 #fff,  80vw 46vh 0 0 #fff,
+      84vw 58vh 0 0 #fff, 88vw 50vh 0 0 #fff, 92vw 64vh 0 0 #fff,  6vw 70vh 0 0 #fff,
+      16vw 82vh 0 0 #fff, 24vw 90vh 0 0 #fff, 36vw 84vh 0 0 #fff,  48vw 92vh 0 0 #fff,
+      60vw 86vh 0 0 #fff, 72vw 94vh 0 0 #fff, 84vw 88vh 0 0 #fff,  96vw 80vh 0 0 #fff;
+    animation: twinkle 6.5s ease-in-out infinite alternate, drift 60s linear infinite;
+    opacity: 0.9;
+}
+
+/* Big stars layer (3px) */
+.hero__stars::after {
+    content: "";
+    position: absolute; inset: 0;
+    width: 3px; height: 3px; border-radius: 50%;
+    background: var(--color-white);
+    /* fewer but brighter + slight glow via blur radius in shadow */
+    box-shadow:
+      10vw 12vh 6px 0 #fff, 20vw 22vh 8px 0 #fff, 38vw 8vh 6px 0 #fff, 52vw 16vh 8px 0 #fff,
+      68vw 28vh 6px 0 #fff, 82vw 10vh 8px 0 #fff, 30vw 30vh 6px 0 #fff, 55vw 34vh 8px 0 #fff,
+      75vw 18vh 6px 0 #fff, 15vw 46vh 8px 0 #fff, 46vw 72vh 6px 0 #fff, 64vw 64vh 8px 0 #fff,
+      28vw 76vh 6px 0 #fff, 72vw 78vh 8px 0 #fff, 90vw 20vh 6px 0 #fff, 12vw 20vh 8px 0 #fff;
+    animation: twinkle 5.5s ease-in-out infinite alternate, drift 90s linear infinite reverse;
+    filter: drop-shadow(0 0 6px rgba(255,255,255,.6));
+}
+
+/* Sweeping light rays */
+@keyframes sweep {
+    0% { transform: rotate(0deg) translateX(-20%); opacity: 0.2; }
+    50% { opacity: 0.35; }
+    100% { transform: rotate(30deg) translateX(20%); opacity: 0.2; }
+}
+.hero__rays {
+    position: absolute; inset: -10% -10% -10% -10%;
+    z-index: 1; pointer-events: none; overflow: hidden;
+    mix-blend-mode: screen;
+}
+.hero__rays::before,
+.hero__rays::after {
+    content: "";
+    position: absolute; left: -25%; top: -10%;
+    width: 150%; height: 150%;
+    background:
+      conic-gradient(from 120deg,
+        transparent,
+        var(--ray-color) 10%,
+        transparent 20%,
+        var(--ray-color) 30%,
+        transparent 45%,
+        var(--ray-color) 55%,
+        transparent 65%);
+    filter: blur(20px);
+    animation: sweep 12s ease-in-out infinite alternate;
+}
+.hero__rays::after {
+    animation-duration: 18s;
+    animation-delay: -6s;
+    opacity: 0.6;
+}
+
+/* Crystal field wrapper */
+.hero__crystals {
+    position: absolute; inset: 0; z-index: 2; pointer-events: none;
+    display: grid; place-items: center;
+    perspective: 1000px;
+}
+
+/* Orbit container rotates slowly; crystals inside have their own bob/tilt */
+@keyframes orbit {
+    from { transform: rotate(0deg) translateZ(0); }
+    to   { transform: rotate(360deg) translateZ(0); }
+}
+.crystal-orbit {
+    position: relative;
+    width: 80vmin; height: 80vmin;
+    max-width: 1000px; max-height: 1000px;
+    animation: orbit 60s linear infinite;
+    transform-origin: center center;
+    filter: drop-shadow(0 10px 18px rgba(0,0,0,0.35));
+}
+
+/* Single crystal */
+.crystal {
+    position: absolute;
+    width: clamp(56px, 8vmin, 120px);
+    aspect-ratio: 0.6/1; /* tall shard */
+    transform-style: preserve-3d;
+    will-change: transform;
+    filter: drop-shadow(0 0 12px rgba(0, 242, 211, .35));
+}
+
+/* Different radial positions (rough circle layout) */
+.crystal.pos1 { top: 6%;  left: 50%; transform: translate(-50%, -50%) rotate(8deg); }
+.crystal.pos2 { top: 22%; left: 78%; transform: translate(-50%, -50%) rotate(-10deg); }
+.crystal.pos3 { top: 44%; left: 90%; transform: translate(-50%, -50%) rotate(6deg); }
+.crystal.pos4 { top: 72%; left: 78%; transform: translate(-50%, -50%) rotate(-5deg); }
+.crystal.pos5 { top: 86%; left: 50%; transform: translate(-50%, -50%) rotate(12deg); }
+.crystal.pos6 { top: 72%; left: 22%; transform: translate(-50%, -50%) rotate(-8deg); }
+.crystal.pos7 { top: 44%; left: 10%; transform: translate(-50%, -50%) rotate(4deg); }
+.crystal.pos8 { top: 22%; left: 22%; transform: translate(-50%, -50%) rotate(-6deg); }
+
+/* The shard body uses clip-path polygons to get a faceted shape */
+.crystal__body {
+    width: 100%; height: 100%; border-radius: 8px;
+    background:
+      linear-gradient(180deg, var(--crystal-top), var(--crystal-mid) 60%, var(--crystal-low) 100%);
+    clip-path: polygon(50% 0%, 65% 16%, 80% 38%, 70% 70%, 50% 100%, 30% 70%, 20% 38%, 35% 16%);
+    box-shadow:
+      inset 0 0 12px rgba(255,255,255,0.35),
+      inset 0 -18px 28px rgba(0,0,0,0.35);
+    transform: translate3d(calc(var(--px) * 0.06), calc(var(--py) * 0.06), 0) rotateX(6deg);
+}
+
+/* Edge highlights */
+.crystal__body::after {
+    content: "";
+    position: absolute; inset: 0;
+    background:
+      linear-gradient(120deg, rgba(255,255,255,0.45), transparent 40%),
+      linear-gradient(240deg, rgba(255,255,255,0.20), transparent 55%);
+    mix-blend-mode: screen;
+    clip-path: inherit;
+    border-radius: 8px;
+}
+
+/* Idle bobbing + subtle tilt */
+@keyframes bob {
+    0%,100% { transform: translate3d(0, -6px, 0) rotateZ(0deg); }
+    50%     { transform: translate3d(0,  6px, 0) rotateZ(1.5deg); }
+}
+.crystal .crystal__body {
+    animation: bob 6s ease-in-out infinite;
+}
+.crystal:nth-child(2) .crystal__body { animation-duration: 7.5s; }
+.crystal:nth-child(3) .crystal__body { animation-duration: 8.2s; }
+.crystal:nth-child(4) .crystal__body { animation-duration: 7s; }
+.crystal:nth-child(5) .crystal__body { animation-duration: 8.8s; }
+.crystal:nth-child(6) .crystal__body { animation-duration: 7.2s; }
+.crystal:nth-child(7) .crystal__body { animation-duration: 6.8s; }
+.crystal:nth-child(8) .crystal__body { animation-duration: 7.9s; }
+
+/* Sparkles near CTA */
+@keyframes sparkle {
+    0%   { transform: translateY(0) scale(0.6); opacity: 0; }
+    20%  { opacity: 1; }
+    80%  { opacity: 1; }
+    100% { transform: translateY(-18px) scale(1); opacity: 0; }
+}
+.sparkle-field {
+    position: absolute; inset: 0; pointer-events: none; z-index: 3;
+}
+.sparkle {
+    position: absolute; width: 6px; height: 6px; border-radius: 50%;
+    background: radial-gradient(circle, #fff, rgba(255,255,255,0.2));
+    filter: drop-shadow(0 0 6px rgba(255,255,255,0.75));
+    animation: sparkle 2.6s ease-in-out infinite;
+}
+.sparkle.s1 { left: 50%; top: 62%; animation-delay: 0s; }
+.sparkle.s2 { left: 54%; top: 64%; animation-delay: .6s; }
+.sparkle.s3 { left: 46%; top: 66%; animation-delay: 1.2s; }
+
+/* 5. Header & Navigation
+-------------------- */
+.header {
+    position: fixed; top: 0; left: 0; width: 100%;
+    z-index: 100; padding: 1rem 0;
+    transition: background-color 0.3s ease, backdrop-filter 0.3s ease;
+    min-height: 80px; /* Ensure a minimum height for the header */
+}
+.main-content {
+    padding-top: 130px; /* Increased padding to ensure content clears the fixed header */
+}
+.header.scrolled {
+    background-color: rgba(10, 12, 33, 0.7);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+.header__logo img { height: 40px; width: 40px; border-radius: 50%; background-color: var(--color-light); }
+.header__link { color: var(--color-light); font-weight: 600; padding: 0.5rem 1rem; position: relative; }
+.header__link::after {
+    content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+    width: 0; height: 2px; background-color: var(--color-teal);
+    transition: width var(--transition-fast);
+}
+.header__link:hover::after { width: 80%; }
+
+.header__dropdown {
+    position: relative;
+}
+
+.header__dropdown-menu {
+    position: absolute;
+    background-color: var(--color-navy-dark);
+    min-width: 160px;
+    box-shadow: var(--shadow-md);
+    z-index: 101; /* Above other content */
+    border-radius: 8px;
+    padding: 0.5rem 0;
+    top: calc(100% + 10px); /* Position below the toggle link */
+    left: 50%;
+    transform: translateX(-50%) translateY(10px); /* Start slightly lower */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease-out, transform 0.3s ease-out, visibility 0.3s ease-out;
+}
+
+.header__dropdown:hover .header__dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0); /* End at original position */
+}
+
+.header__dropdown-menu li {
+    padding: 0; /* Reset padding from parent li */
+}
+
+.header__dropdown-menu .header__link {
+    padding: 0.75rem 1.5rem; /* Adjust padding for dropdown items */
+    display: block;
+    width: 100%;
+    text-align: center;
+    white-space: nowrap; /* Prevent text wrapping */
+}
+
+.header__dropdown-menu .header__link:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--color-white);
+}
+
+/* Ensure active state for dropdown toggle if any child is active */
+.header__dropdown-toggle.active,
+.header__dropdown:hover .header__dropdown-toggle {
+    color: var(--color-teal); /* Highlight dropdown toggle */
+}
+
+    .header__dropdown-toggle::after {
+        content: ' \25BE'; /* Unicode for a down arrow */
+        font-size: 0.8em;
+        margin-left: 5px;
+        transition: transform 0.3s ease;
+    }
+    
+    .header__dropdown:hover .header__dropdown-toggle::after {
+        transform: rotate(180deg);
+        width: 0; /* Remove the underline on hover for the dropdown toggle */
+    }
+/* 6. Buttons
+-------------------- */
+.button {
+    display: inline-block; padding: 0.75rem 1.5rem; border-radius: var(--border-radius);
+    font-weight: 600; text-align: center; cursor: pointer;
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+    border: 2px solid transparent; will-change: transform;
+}
+.button:focus-visible { outline: 3px solid var(--color-aqua); outline-offset: 2px; }
+.button:hover { transform: translateY(-2px); }
+.button--primary { background-color: var(--color-teal); color: var(--color-navy-dark); }
+.button--primary:hover { color: var(--color-navy-dark); box-shadow: var(--glow-primary); }
+.button--secondary { background-color: transparent; color: var(--color-light); border-color: var(--color-light); }
+.button--secondary:hover { color: var(--color-white); background-color: rgba(255, 255, 255, 0.1); box-shadow: var(--glow-secondary); }
+.button--small { padding: 0.5rem 1rem; font-size: 0.9rem; }
+.button--large { padding: 1rem 2.5rem; font-size: 1.2rem; }
+
+/* 7. Hero Section
+-------------------- */
+.hero {
+    position: relative; display: grid; place-items: center;
+    min-height: 100vh; padding: 8rem 0 4rem;
+    background:
+      radial-gradient(1200px 600px at 50% 18%, rgba(26,26,74,.55), transparent 60%),
+      linear-gradient(160deg, var(--color-indigo) 0%, var(--color-navy-dark) 100%);
+    text-align: center; overflow: hidden;
+}
+.hero__content { position: relative; z-index: 4; max-width: 900px; }
+.hero__title { font-size: 2.8rem; margin-bottom: 1rem; text-shadow: 0 0 18px rgba(0, 242, 211, .22); }
+.hero__subtitle { font-size: 1.1rem; color: var(--color-gray); max-width: 620px; margin: 0 auto 2rem; }
+.hero__actions { display: flex; flex-direction: column; gap: 1rem; align-items: center; }
+
+/* 8. How It Works Section (Glassmorphism)
+-------------------- */
+.how-it-works { padding: 5rem 0; background: linear-gradient(90deg, var(--color-teal) 0%, var(--color-aqua) 100%); }
+.how-it-works .section-title { color: var(--color-navy-dark); }
+.how-it-works__grid { display: grid; gap: 2rem; }
+.card-glass {
+    background: rgba(255, 255, 255, 0.15); border-radius: 16px; padding: 2rem; text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.2); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    box-shadow: var(--shadow-sm);
+}
+.card-glass__icon { margin-bottom: 1.5rem; }
+.card-glass__icon svg { stroke: var(--color-navy-dark); }
+.card-glass__title { font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--color-navy-dark); }
+.card-glass__body { color: var(--color-navy-light); margin-bottom: 1.5rem; }
+.card-glass .button { background-color: var(--color-white); color: var(--color-navy-dark); }
+.card-glass .button:hover { background-color: var(--color-light); box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+
+/* 9. Nominees Section
+-------------------- */
+.nominees { padding: 5rem 0; }
+.nominees__grid { display: grid; gap: 2rem; }
+.nominee-card {
+    background-color: var(--color-navy-light); border-radius: 16px; padding: 2rem; text-align: center;
+    box-shadow: var(--shadow-md); transition: transform var(--transition-fast);
+}
+.nominee-card:hover { transform: translateY(-5px); }
+.nominee-card__avatar { width: 120px; height: 120px; border-radius: 50%; margin: 0 auto 1.5rem; overflow: hidden; border: 4px solid var(--color-teal); }
+.nominee-card__avatar img { width: 100%; height: 100%; object-fit: cover; background-color: var(--color-gray); }
+.nominee-card__name { font-size: 1.5rem; color: var(--color-teal); margin-bottom: 0.5rem; }
+.nominee-card__blurb { color: var(--color-gray); font-style: italic; margin-bottom: 1.5rem; }
+
+/* 10. CTA Section
+-------------------- */
+.cta { padding: 5rem 0; background-color: var(--color-navy-light); }
+.cta__content { text-align: center; }
+.cta__title { font-size: 2rem; margin-bottom: 1.5rem; }
+
+/* 11. Footer
+-------------------- */
+.footer { padding: 3rem 0; background-color: var(--color-navy-dark); border-top: 1px solid var(--color-navy-light); }
+.footer__content { text-align: center; }
+.footer__links { margin-bottom: 1.5rem; }
+.footer__links a { margin: 0 1rem; color: var(--color-gray); }
+.footer__links a:hover { color: var(--color-white); }
+.footer__socials { display: flex; justify-content: center; gap: 1.5rem; margin-bottom: 1.5rem; }
+.footer__socials a { color: var(--color-gray); }
+.footer__socials a:hover { color: var(--color-white); transform: scale(1.1); }
+.footer__copyright { color: var(--color-gray); font-size: 0.9rem; }
+
+/* 12. Responsive Media Queries + Motion Pref
+-------------------- */
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+    .hero__stars::before,
+    .hero__stars::after,
+    .hero__rays::before,
+    .hero__rays::after,
+    .crystal-orbit,
+    .crystal .crystal__body,
+    .sparkle {
+        animation: none !important;
+    }
+    :root { --px: 0px; --py: 0px; }
+}
+
+/* Tablet */
+@media (min-width: 768px) {
+    .section-title { font-size: 3rem; }
+    .header__nav .header__logo { flex-shrink: 0; }
+    .header__menu { display: flex; gap: 1rem; flex-shrink: 0; }
+    .header__login { display: block; }
+    .hero__title { font-size: 4rem; }
+    .hero__subtitle { font-size: 1.25rem; }
+    .hero__actions { flex-direction: row; justify-content: center; gap: 1.5rem; }
+    .how-it-works__grid { grid-template-columns: repeat(3, 1fr); }
+    .nominees__grid { grid-template-columns: repeat(2, 1fr); }
+    .cta__content { display: flex; justify-content: space-between; align-items: center; }
+    .cta__title { margin-bottom: 0; text-align: left; }
+}
+
+/* Desktop */
+@media (min-width: 1024px) {
+    .nominees__grid { grid-template-columns: repeat(3, 1fr); }
+    .header__menu { gap: 2rem; }
+}
+
+/* Large Desktop */
+@media (min-width: 1440px) {
+    html { font-size: 18px; }
+    .hero__title { font-size: 5rem; }
+}
+
+/* Mobile Menu Specific Styles */
+.mobile-menu-toggle {
+    display: block !important; /* Ensure it's always block on mobile */
+    color: var(--color-white) !important; /* Explicitly set color to white */
+    z-index: 70; /* Higher than overlay */
+}
+
+.mobile-menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 50%; /* Take up 50% of the screen width */
+    max-width: 280px; /* Max width for larger screens */
+    background-color: var(--color-aqua); /* Neon blue background */
+    transform: translateX(-100%); /* Start off-screen to the left */
+    transition: transform 0.35s cubic-bezier(0.25, 0.1, 0.25, 1); /* Smoother ease */
+    z-index: 50;
+    padding-top: 4rem; /* Add some space at the top */
+}
+
+.mobile-menu-overlay.is-open {
+    transform: translateX(0); /* Slide in */
+}
+
+.mobile-menu-links .header__link {
+    /* Animation for staggered slide-in */
+    opacity: 0;
+    transform: translateX(-20px);
+    transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+    transition-delay: var(--delay, 0s);
+
+    color: var(--color-navy-dark); /* Darker text for contrast on bright background */
+    font-weight: 700;
+    padding: 1rem 2rem;
+    display: block;
+    width: 100%;
+    text-align: left; /* Align text to the left */
+}
+
+.mobile-menu-overlay.is-open .mobile-menu-links .header__link {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.mobile-menu-links .header__link:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Mobile dropdown specific styles */
+.mobile-menu-overlay .header__dropdown-menu {
+    position: static; /* Remove absolute positioning */
+    background-color: transparent; /* Inherit background from overlay or set transparent */
+    box-shadow: none; /* Remove shadow */
+    min-width: auto;
+    padding: 0;
+    top: auto;
+    left: auto;
+    transform: none; /* Remove transform */
+    opacity: 1; /* Always visible when parent is active */
+    visibility: visible; /* Always visible when parent is active */
+    display: none; /* Hidden by default, toggled by JS */
+    text-align: center;
+    z-index: 102; /* Ensure it's above other content in the overlay */
+}
+
+.mobile-menu-overlay .header__dropdown-menu.active {
+    display: block !important; /* Use !important to override potential TailwindCSS hidden */
+}
+
+.mobile-dropdown-menu {
+    display: none;
+}
+.mobile-dropdown-menu.active {
+    display: block;
+}
+.mobile-menu-overlay .header__dropdown-menu li {
+    padding: 0; /* Reset padding from parent li */
+}
+
+.mobile-menu-overlay .header__dropdown-menu .header__link {
+    padding: 0.75rem 1rem; /* Adjust padding for nested links */
+    font-size: 1.5rem; /* Adjust font size for nested links */
+    color: var(--color-navy-dark); /* Ensure color contrast */
+}
+
+/* Mobile Logout Button Positioning */
+.mobile-logout-btn {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    z-index: 60; /* Above the overlay */
+}
+
+/* Ensure desktop menu is hidden on mobile and vice-versa */
+@media (max-width: 1023px) { /* Tailwind's 'lg' breakpoint is 1024px */
+    .header__menu {
+        display: none !important; /* Hide desktop menu on mobile */
+    }
+    .desktop-logout-btn {
+        display: none !important; /* Hide desktop logout on mobile */
+    }
+}
+
+@media (min-width: 1024px) {
+    .mobile-menu-toggle,
+    .mobile-logout-btn {
+        display: none !important; /* Hide mobile elements on desktop */
+    }
+    .header__menu {
+        display: flex !important; /* Ensure desktop menu is visible */
+    }
+}
